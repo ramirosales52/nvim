@@ -19,8 +19,8 @@ return {
       -- Define workspaces for Obsidian
       workspaces = {
         {
-          name = "My Vault", -- Name of the workspace
-          path = "/mnt/e/Drive/Obsidian/My Vault", -- Path to the notes directory
+          name = "notes", -- Name of the workspace
+          path = "/mnt/e/Drive/Obsidian/notes", -- Path to the notes directory
         },
       },
 
