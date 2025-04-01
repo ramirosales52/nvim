@@ -16,11 +16,15 @@ return {
     },
 
     opts = {
+      ui = {
+        enabled = false,
+      },
+
       -- Define workspaces for Obsidian
       workspaces = {
         {
-          name = "notes", -- Name of the workspace
-          path = "/mnt/e/Drive/Obsidian/notes", -- Path to the notes directory
+          name = "vault", -- Name of the workspace
+          path = "/mnt/e/Obsidian/vault", -- Path to the notes directory
         },
       },
 
@@ -29,12 +33,12 @@ return {
         min_chars = 2,
       },
 
-      notes_subdir = "new-notes", -- Subdirectory for notes
-      new_notes_location = "new-notes", -- Location for new notes
+      notes_subdir = "notes/new-notes", -- Subdirectory for notes
+      new_notes_location = "notes/new-notes", -- Location for new notes
 
       -- Settings for attachments
       attachments = {
-        img_folder = "files", -- Folder for image attachments
+        img_folder = "notes/files", -- Folder for image attachments
       },
 
       -- Settings for daily notes
@@ -55,19 +59,6 @@ return {
         ["<leader>od"] = {
           action = function()
             return require("obsidian").util.toggle_checkbox()
-          end,
-          opts = { buffer = true },
-        },
-        -- Create a new newsletter issue
-        ["<leader>onn"] = {
-          action = function()
-            return require("obsidian").commands.new_note("Newsletter-Issue")
-          end,
-          opts = { buffer = true },
-        },
-        ["<leader>ont"] = {
-          action = function()
-            return require("obsidian").util.insert_template("Newsletter-Issue")
           end,
           opts = { buffer = true },
         },
@@ -108,7 +99,7 @@ return {
 
       -- Settings for templates
       templates = {
-        subdir = "templates", -- Subdirectory for templates
+        subdir = "notes/templates", -- Subdirectory for templates
         date_format = "%d-%m-%Y %a", -- Date format for templates
         gtime_format = "%H:%M", -- Time format for templates
         tags = "", -- Default tags for templates
