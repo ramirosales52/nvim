@@ -347,7 +347,7 @@ return {
         left_pad = 0,
         -- Padding to add to the right of bullet point.
         -- Output is evaluated using the same logic as 'left_pad'.
-        right_pad = 0,
+        right_pad = 1,
         -- Highlight for the bullet icon.
         -- Output is evaluated using the same logic as 'icons'.
         highlight = "RenderMarkdownBullet",
@@ -363,7 +363,7 @@ return {
         -- Additional modes to render checkboxes.
         render_modes = false,
         -- Padding to add to the right of checkboxes.
-        right_pad = -1,
+        right_pad = 0,
         unchecked = {
           -- Replaces '[ ]' of 'task_list_marker_unchecked'.
           icon = "[ ]   ",
