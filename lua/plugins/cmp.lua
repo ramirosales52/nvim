@@ -1,10 +1,4 @@
 return {
-  {
-    "williamboman/mason.nvim",
-    lazy = false,
-    opts = {},
-  },
-
   -- Snippets
   { "L3MON4D3/LuaSnip" },
   { "saadparwaiz1/cmp_luasnip" },
@@ -17,71 +11,123 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      { "L3MON4D3/LuaSnip" },
-      { "saadparwaiz1/cmp_luasnip" },
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
     },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      local kind_icons = {
-        Text = "",
-        Method = "󰆧",
-        Function = "󰊕",
-        Constructor = "",
-        Field = "󰇽",
-        Variable = "󰂡",
-        Class = "󰠱",
-        Interface = "",
-        Module = "",
-        Property = "󰜢",
-        Unit = "",
-        Value = "󰎠",
-        Enum = "",
-        Keyword = "󰌋",
-        Snippet = "",
-        Color = "󰏘",
-        File = "󰈙",
-        Reference = "",
-        Folder = "󰉋",
-        EnumMember = "",
-        Constant = "󰏿",
-        Struct = "",
-        Event = "",
-        Operator = "󰆕",
-        TypeParameter = "󰅲",
-      }
 
       cmp.setup({
-        sources = {
+        sources = cmp.config.sources({
+          { name = "lazydev" },
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "latex_symbols", option = { strategy = 2 } },
-        },
+          { name = "path" },
+        }, {
+          { name = "buffer" },
+        }),
+
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
         formatting = {
-          expandable_indicator = true,
           fields = { "abbr", "kind", "menu" },
-          format = function(entry, vim_item)
-            vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
-            vim_item.menu = ({
-              buffer = "[Buffer]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[LuaSnip]",
-              nvim_lua = "[Lua]",
-              latex_symbols = "[LaTeX]",
-            })[entry.source.name]
-            return vim_item
+          format = function(entry, item)
+            local KIND_ICONS = {
+              Tailwind = "███████",
+            }
+
+            if item.kind == "Color" and entry.completion_item.documentation then
+              local doc = entry.completion_item.documentation
+
+              if type(doc) == "table" and doc.value then
+                doc = doc.value
+              end
+
+              local _, _, r, g, b = string.find(doc or "", "^rgb%((%d+), (%d+), (%d+)")
+              local color
+
+              if r and g and b then
+                color = string.format("%02x", r) .. string.format("%02x", g) .. string.format("%02x", b)
+              else
+                local hex = (doc or ""):match("#%x%x%x%x%x%x")
+                if hex then
+                  color = hex:gsub("#", "")
+                else
+                  item.kind = LazyVim.config.icons.kinds.Color .. item.kind
+
+                  return item
+                end
+              end
+
+              local group = "Tw_" .. color
+
+              if vim.api.nvim_call_function("hlID", { group }) < 1 then
+                vim.api.nvim_command("highlight " .. group .. " guifg=#" .. color)
+              end
+
+              item.kind = KIND_ICONS.Tailwind
+              item.kind_hl_group = group
+
+              return item
+            end
+
+            -- Otros tipos de sugerencia
+            item.kind = KIND_ICONS[item.kind] or item.kind
+
+            local icons = LazyVim.config.icons.kinds
+            if icons[item.kind] then
+              item.kind = icons[item.kind] .. item.kind
+            end
+
+            local widths = {
+              abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
+              menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
+            }
+
+            for key, width in pairs(widths) do
+              if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
+                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
+              end
+            end
+
+            return item
           end,
         },
+        sorting = {
+          priority_weight = 2,
+          comparators = {
+            cmp.config.compare.exact,
+            cmp.config.compare.offset,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+            cmp.config.compare.scopes,
+          },
+        },
         mapping = cmp.mapping.preset.insert({
-          ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<C-e>"] = cmp.mapping.abort(),
+          ["<S-CR>"] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
+          ["<C-e>"] = function(fallback)
+            cmp.abort()
+            fallback()
+          end,
+          ["<tab>"] = function(fallback)
+            return LazyVim.cmp.map({ "snippet_forward", "ai_accept" }, fallback)()
+          end,
         }),
         snippet = {
           expand = function(args)
@@ -91,61 +137,5 @@ return {
       })
     end,
   },
-
-  -- LSP
-  {
-    "neovim/nvim-lspconfig",
-    cmd = { "LspInfo", "LspInstall", "LspStart" },
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      { "hrsh7th/cmp-nvim-lsp" },
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
-    },
-    init = function()
-      -- Reserve a space in the gutter
-      -- This will avoid an annoying layout shift in the screen
-      vim.opt.signcolumn = "yes"
-    end,
-    config = function()
-      local lsp_defaults = require("lspconfig").util.default_config
-
-      -- Add cmp_nvim_lsp capabilities settings to lspconfig
-      -- This should be executed before you configure any language server
-      lsp_defaults.capabilities =
-        vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
-
-      -- LspAttach is where you enable features that only work
-      -- if there is a language server active in the file
-      vim.api.nvim_create_autocmd("LspAttach", {
-        desc = "LSP actions",
-        callback = function(event)
-          local opts = { buffer = event.buf }
-
-          vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-          vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-          vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-          vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-          vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-          vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-          vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-          vim.keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-          vim.keymap.set({ "n", "x" }, "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
-          vim.keymap.set("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-        end,
-      })
-
-      require("mason-lspconfig").setup({
-        ensure_installed = {},
-        automatic_installation = true,
-        handlers = {
-          -- this first function is the "default handler"
-          -- it applies to every language server without a "custom handler"
-          function(server_name)
-            require("lspconfig")[server_name].setup({})
-          end,
-        },
-      })
-    end,
-  },
+  main = "lazyvim.util.cmp",
 }
