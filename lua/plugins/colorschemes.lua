@@ -6,6 +6,7 @@ return {
   { "shaunsingh/nord.nvim" },
   { "tiagovla/tokyodark.nvim" },
   { "vague2k/vague.nvim" },
+  { "rose-pine/neovim" },
   {
     "uloco/bluloco.nvim",
     lazy = false,

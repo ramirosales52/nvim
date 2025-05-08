@@ -40,7 +40,7 @@ return {
           fields = { "abbr", "kind", "menu" },
           format = function(entry, item)
             local KIND_ICONS = {
-              Tailwind = "███████",
+              Tailwind = "██████████",
             }
 
             if item.kind == "Color" and entry.completion_item.documentation then
