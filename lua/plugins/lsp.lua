@@ -4,4 +4,10 @@ return {
 
   -- LSP bridge – latest 1.x release tag (Feb 15 2025)
   { "williamboman/mason-lspconfig.nvim", commit = "1a31f82" }, -- v1.32.0
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      inlay_hints = { enabled = false },
+    },
+  },
 }

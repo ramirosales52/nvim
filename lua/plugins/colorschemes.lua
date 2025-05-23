@@ -7,6 +7,7 @@ return {
   { "tiagovla/tokyodark.nvim" },
   { "vague2k/vague.nvim" },
   { "rose-pine/neovim" },
+  { "yorumicolors/yorumi.nvim" },
   {
     "uloco/bluloco.nvim",
     lazy = false,
@@ -19,6 +20,11 @@ return {
   {
     "olimorris/onedarkpro.nvim",
     priority = 1000, -- Ensure it loads first
+  },
+  {
+    "dgox16/oldworld.nvim",
+    lazy = false,
+    priority = 1000,
   },
   {
     "sainnhe/everforest",
