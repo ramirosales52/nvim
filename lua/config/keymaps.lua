@@ -21,3 +21,10 @@ vim.keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<CR>", { desc = "Search Ob
 vim.keymap.set("n", "<leader>oq", "<cmd>ObsidianQuickSwitch<CR>", { desc = "Quick Switch" })
 
 vim.keymap.set("n", "<leader>uq", "<cmd>NoNeckPain<CR>", { desc = "Center editor" })
+
+----- Delete without copying into register -----
+vim.keymap.set("n", "d", '"_d', { noremap = true, silent = true })
+vim.keymap.set("n", "D", '"_D', { noremap = true, silent = true })
+vim.keymap.set("n", "c", '"_c', { noremap = true, silent = true })
+vim.keymap.set("n", "C", '"_C', { noremap = true, silent = true })
+vim.keymap.set("n", "x", '"_x', { noremap = true, silent = true })

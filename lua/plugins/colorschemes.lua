@@ -8,6 +8,11 @@ return {
   { "vague2k/vague.nvim" },
   { "rose-pine/neovim" },
   { "yorumicolors/yorumi.nvim" },
+  { "loctvl842/monokai-pro.nvim" },
+  { "EdenEast/nightfox.nvim" },
+  { "nyoom-engineering/oxocarbon.nvim" },
+  { "arzg/vim-colors-xcode" },
+  { "ntk148v/habamax.nvim", dependencies = { "rktjmp/lush.nvim" } },
   {
     "uloco/bluloco.nvim",
     lazy = false,

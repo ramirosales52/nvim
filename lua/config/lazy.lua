@@ -15,7 +15,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.opt.autoindent = true
-vim.opt.smartindent = true
+vim.opt.smartindent = false
 vim.opt.expandtab = true
 vim.opt.smarttab = true
 vim.opt.breakindent = true
@@ -26,6 +26,7 @@ vim.opt.backspace = { "start", "eol", "indent" }
 vim.opt.wildignore:append({ "*/node_modules/*" })
 vim.opt.formatoptions:remove("o")
 vim.opt.conceallevel = 1
+vim.opt.completeopt = { "menu", "menuone" }
 
 require("lazy").setup({
   spec = {
