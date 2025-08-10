@@ -4,6 +4,7 @@
   "NeoSolarized.nvim": { "branch": "master", "commit": "3c55ad358c062aa4879950c4f83b4deeac6b72df" },
   "SchemaStore.nvim": { "branch": "main", "commit": "a23c631533b60f8d24ca9826bf28c9e21bec0424" },
   "aquarium-vim": { "branch": "develop", "commit": "6da0091836f36f82af558f0395ea50fd5a297d6d" },
+  "auto-indent.nvim": { "branch": "main", "commit": "46801cf8857d42a20a73c40b0a5d3dfe8b2b6192" },
   "barbecue": { "branch": "main", "commit": "cd7e7da622d68136e13721865b4d919efd6325ed" },
   "blue-moon": { "branch": "master", "commit": "ed4ed60abeb8491d02090cea6ae2dd80046c28fc" },
   "bluloco.nvim": { "branch": "main", "commit": "afc95b6696a0a568a5a186a7e563f6c9947d0d79" },
