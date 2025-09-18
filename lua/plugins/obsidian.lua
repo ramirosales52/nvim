@@ -15,10 +15,11 @@ return {
       "nvim-lua/plenary.nvim",
     },
 
+    ui = {
+      enabled = false,
+    },
+
     opts = {
-      ui = {
-        enabled = false,
-      },
 
       -- Define workspaces for Obsidian
       workspaces = {
